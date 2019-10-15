@@ -10,9 +10,10 @@ namespace GraphLesko
         private Vertex[] _vertices;
         private ITraversal _strategy;
 
-        public Graph(Vertex[] array)
+        public Graph(Vertex[] array, ITraversal strategy)
         {
             _vertices = new Vertex[array.Length];
+            _strategy = strategy;
 
             for (int i = 0; i < array.Length; i++)
             {

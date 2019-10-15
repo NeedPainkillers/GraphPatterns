@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace GraphLesko
 {
@@ -19,19 +19,38 @@ namespace GraphLesko
         {
             vertex.status = 1;
             _queue.Clear();
+            _queue.Add(vertex);
 
-            for (int i = 0; i < vertex.vertices.Count; i++)
+            List<Vertex> toAdd = vertex.vertices.Where(x => x.status.Equals(0)).ToList();
+            _queue.AddRange(toAdd);
+            for (int i = 0; i < toAdd.Count(); i++)
             {
-                vertex.vertices[i].status = 1;
+                toAdd[i].status = 1;
             }
-            _queue.AddRange(vertex.vertices);
-            position = 0;
+            position = -1;
         }
 
         public Vertex Next()
         {
             try
             {
+                position++;
+                if (position >= _queue.Count())
+                    return null;
+
+                if (position == 0)
+                {
+                    _queue[position].status = 2;
+                    return _queue[position];
+                }
+
+                List<Vertex> toAdd = _queue[position].vertices.Where(x => x.status.Equals(0)).ToList();
+                _queue.AddRange(toAdd);
+                for (int i = 0; i < toAdd.Count(); i++)
+                {
+                    toAdd[i].status = 1;
+                }
+                _queue[position].status = 2;
                 return _queue[position];
             }
             catch (IndexOutOfRangeException)
@@ -43,16 +62,30 @@ namespace GraphLesko
 
     public class DepthTraversal : ITraversal
     {
-        List<Vertex> stack { get; set; } = new List<Vertex>();
+        Stack<Vertex> stack { get; set; } = new Stack<Vertex>();
 
         public void Init(Vertex vertex)
         {
-            throw new NotImplementedException();
+            stack.Push(vertex);
+            vertex.status = 1;
         }
 
         public Vertex Next()
         {
-            throw new NotImplementedException();
+            if(stack.Count() == 0)
+                return null;
+
+            Vertex item = stack.Pop();
+            item.status = 2;
+
+            List<Vertex> vertices = item.vertices.Where(x => x.status == 0).ToList();
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                stack.Push(vertices[i]);
+                vertices[i].status = 1;
+            }
+
+            return item;
         }
     }
 }
