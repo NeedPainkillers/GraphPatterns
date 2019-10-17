@@ -24,11 +24,24 @@ namespace GraphLesko
 
             vertex[3].vertices.Add(vertex[6]);
 
+            VertexLocator provider = new VertexLocator();
+
+            Observer observer1 = new Observer("SomeName");
+            Observer observer2 = new Observer("NASA");
+
+            observer1.Subscribe(provider);
+            observer2.Subscribe(provider);
+
             Graph graph = new Graph(vertex, new BreadthTraversal());
             foreach (var item in graph)
             {
                 Console.WriteLine(item.data);
+                provider.CheckVertex(item);
             }
+
+
+            
+
         }
     }
 }
