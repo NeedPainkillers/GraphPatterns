@@ -20,7 +20,7 @@ namespace GraphLesko
             return new Unsubscriber(_observers, observer);
         }
 
-        public void CheckVertex(Vertex vertex)
+        public void SendMessage(Vertex vertex)
         {
             foreach (var observer in _observers)
             {
@@ -76,10 +76,7 @@ namespace GraphLesko
 
         public void OnNext(Vertex value)
         {
-            //the predicate could be passed here
-            //but for testing purposes i found this isn't necessary
-            if (value.vertices.Count.Equals(0))
-                Console.WriteLine(String.Format("{1} is notifying: {0} is dead end", value.data, _instName));
+            Console.WriteLine(String.Format("{1} is notifying: {0} is dead end", value.data, _instName));
         }
     }
 

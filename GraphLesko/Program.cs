@@ -36,11 +36,15 @@ namespace GraphLesko
             foreach (var item in graph)
             {
                 Console.WriteLine(item.data);
-                provider.CheckVertex(item);
+                if (item.vertices.Count.Equals(0))
+                { 
+                    provider.SendMessage(item);
+                }
             }
+                    observer1.OnCompleted();
 
 
-            
+
 
         }
     }
